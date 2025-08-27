@@ -189,7 +189,7 @@ The precision varies from 30% to 70%
 </div>
 3. Using PCA:
 <div align="center">
-<img src="results/col_pca.png" width=700px>
+<img src="results/colcm_pca.png" width=700px>
 </div>
 ### Discussions on using the collected data to predict activities performed:
 I tested three different approaches for training and evaluating a Decision Tree model on our collected activity data. The results are compared based on accuracy, precision, and recall.

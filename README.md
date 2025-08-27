@@ -172,15 +172,60 @@ The precision varies from 17.2% to 41.4%
 The accuracy and recall vary from 50% to 76%
 The precision varies from 30% to 70%
 
-### Results
+### Use the data you collected to predict the activities that you performed. Decide whether to apply preprocessing and featurization, and if so, choose the appropriate methods. How did the model perform?
+1. On flattened collected data
 <div align="center">
-<img src="results/deploy_rawf.png" width=700px>
+<img src="results/col_raw.png" width=700px>
 </div>
 <div align="center">
-<img src="results/deploycm_rawf.png" width=700px>
+<img src="results/colcm_raw.png" width=700px>
 </div>
+2. Using TSFEL:
+<div align="center">
+<img src="results/col_tsfel.png" width=700px>
+</div>
+<div align="center">
+<img src="results/colcm_tsfel.png" width=700px>
+</div>
+3. Using PCA:
+<div align="center">
+<img src="results/col_pca.png" width=700px>
+</div>
+### Discussions on using the collected data to predict activities performed:
+I tested three different approaches for training and evaluating a Decision Tree model on our collected activity data. The results are compared based on accuracy, precision, and recall.
 
+Case 1: Raw Flattened Data
 
+Accuracy: ~0.55 (best depth), starting from 0.22 at shallow depth
+
+Precision (weighted): ~0.59
+
+Recall (macro): ~0.50
+
+The raw flattened data produced the weakest results overall. Although the model reached ~0.55 accuracy at higher depths, the precision and recall values show that many classes were misclassified. The confusion matrix indicated that the model could not effectively distinguish between dynamic and static activities. This is likely because the raw accelerometer signals are high-dimensional and noisy, making it difficult for a shallow tree to separate the classes properly.
+
+Case 2: TSFEL Featurised Data
+
+Accuracy: ~0.77 (best depth)
+
+Precision (weighted): ~0.70
+
+Recall (weighted): ~0.77
+
+Featurisation with TSFEL gave the best results. By extracting meaningful time-domain, frequency-domain, and statistical features from the raw signals, the model was able to classify activities more accurately. With ~0.77 accuracy and balanced precision/recall, the model performed well across most activities. However, confusion matrices still showed some overlaps between activities with similar motion patterns, such as sitting vs standing and upstairs vs downstairs.
+
+Case 3: PCA Reduced Data (2 components)
+
+Accuracy: ~0.56
+
+Precision (weighted): ~0.59
+
+Recall (weighted): ~0.56
+
+Using PCA to reduce the high-dimensional raw signals into just two principal components improved over the raw flattened case (Case 1) but still performed significantly worse than TSFEL. PCA captures overall variance but does not directly extract features that are discriminative for classification. This makes the model less effective at distinguishing between subtle activity differences.
+
+### Final Verdict
+Among the three approaches, TSFEL featurisation produced the best model with an accuracy of ~0.77, balanced precision and recall, and overall better separation between activity classes. This highlights the importance of using domain-specific feature extraction for activity recognition tasks. The PCA and raw flattened approaches performed worse, confirming that the quality and relevance of features strongly impact model performance.
 # **General Instructions :**
 1. Show your results in a Jupyter Notebook or an MD file. If you opt for using an MD file, you should also include the code.
 2. You can use the scikit-learn implementation of the Decision Tree for Human Activity Recognition.
